@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import LLMResponse from "../components/llmResponse";
 
+
 export default function PromptForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
@@ -26,6 +27,7 @@ export default function PromptForm() {
       if (res.ok) {
         const data = await res.json();
         setResponseGPT4(data.response); // Assuming `response` is the key in the response
+        setTypedResponse(data.response); // Set typed response immediately  
       } else {
         setResponseGPT4("Failed to fetch response from the LLM.");
       }
