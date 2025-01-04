@@ -1,11 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import LLMResponse from "../components/llmResponse";
 
 export default function PromptForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [aiResponse, setAIResponse] = useState(""); // Final response
+  const [gemma2Response, setGemma2Response] = useState(""); // Final response
+  const [mixtralResponse, setMixtralResponse] = useState(""); // Final response
+  const [llamaResponse, setLlamaResponse] = useState(""); // Final response
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,20 +23,26 @@ export default function PromptForm() {
 
       if (res.ok) {
         const data = await res.json();
-        setAIResponse(data.message);
+        setGemma2Response(data.gemma2Response);
+        setMixtralResponse(data.mixtralResponse);
+        setLlamaResponse(data.llamaResponse);
       } else {
-        setAIResponse("An error occurred while querying the LLM.");
+        setGemma2Response("An error occurred while querying the LLM.");
+        setMixtralResponse("An error occurred while querying the LLM.");
+        setLlamaResponse("An error occurred while querying the LLM.");
       }
     } catch (error) {
       console.error(error);
-      setAIResponse("An error occurred while querying the LLM.");
+      setGemma2Response("An error occurred while querying the LLM.");
+      setMixtralResponse("An error occurred while querying the LLM.");
+      setLlamaResponse("An error occurred while querying the LLM.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4">
+    <div className="max-w-screen-lg mx-auto p-4">
       <form onSubmit={handleSubmit} className="flex items-center space-x-2">
         <textarea
           value={prompt}
@@ -55,9 +63,11 @@ export default function PromptForm() {
         </button>
       </form>
 
-      {/* LLMResponse Component */}
-      <div className="mt-4">
-        <LLMResponse response={aiResponse} />
+      {/* LLMResponse Components */}
+      <div className="mt-4 flex justify-between gap-4">
+        <LLMResponse response={gemma2Response} model="gemma2-9b-it" />
+        <LLMResponse response={mixtralResponse} model="mixtral-8x7b-32768" />
+        <LLMResponse response={llamaResponse} model="llama-3.3-70b-versatile" />
       </div>
     </div>
   );
