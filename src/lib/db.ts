@@ -1,12 +1,9 @@
-import { MongoClient } from "mongodb";
+// src/db.ts
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
+import { config } from "dotenv";
 
-const uri = process.env.DB_URI as string;
-let client: MongoClient;
+config({ path: ".env" }); // or .env.local
 
-export async function connectToDB() {
-  if (!client) {
-    client = new MongoClient(uri);
-    await client.connect();
-  }
-  return client.db("llm_metrics_db");
-}
+const sql = neon(process.env.DATABASE_URL!);
+export const db = drizzle({ client: sql });

@@ -2,20 +2,15 @@
 import React, { useState, useEffect } from "react";
 import LLMResponse from "../components/llmResponse";
 
-
 export default function PromptForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [responseGPT4, setResponseGPT4] = useState(""); // Final response
-  const [typedResponse, setTypedResponse] = useState(""); // For dynamic typing effect
+  const [aiResponse, setAIResponse] = useState(""); // Final response
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTypedResponse(""); // Reset typed response for new typing effect
-
     try {
-      // Example API call
       const res = await fetch("/api/prompts", {
         method: "POST",
         headers: {
@@ -26,34 +21,17 @@ export default function PromptForm() {
 
       if (res.ok) {
         const data = await res.json();
-        setResponseGPT4(data.response); // Assuming `response` is the key in the response
-        setTypedResponse(data.response); // Set typed response immediately  
+        setAIResponse(data.message);
       } else {
-        setResponseGPT4("Failed to fetch response from the LLM.");
+        setAIResponse("An error occurred while querying the LLM.");
       }
     } catch (error) {
-      setResponseGPT4("An error occurred while querying the LLM.");
+      console.error(error);
+      setAIResponse("An error occurred while querying the LLM.");
     } finally {
       setIsLoading(false);
     }
   };
-
-  // Effect for typing animation
-  useEffect(() => {
-    if (!responseGPT4) return;
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index < responseGPT4.length) {
-        setTypedResponse((prev) => prev + responseGPT4[index]);
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 50); // Typing speed (50ms per character)
-
-    return () => clearInterval(interval);
-  }, [responseGPT4]);
 
   return (
     <div className="max-w-lg mx-auto p-4">
@@ -79,7 +57,7 @@ export default function PromptForm() {
 
       {/* LLMResponse Component */}
       <div className="mt-4">
-        <LLMResponse response={typedResponse} />
+        <LLMResponse response={aiResponse} />
       </div>
     </div>
   );

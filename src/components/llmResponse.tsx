@@ -12,7 +12,7 @@ const LLMResponse: React.FC<LLMResponseProps> = ({ response }) => {
     if (typewriterRef.current) {
       const typewriter = new Typewriter(typewriterRef.current, {
         loop: false, // Disable looping unless needed
-        delay: 75,
+        delay: 1,
       });
 
       typewriter
