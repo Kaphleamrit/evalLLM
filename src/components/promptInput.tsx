@@ -142,7 +142,7 @@ export default function PromptForm() {
   return (
     <div className="max-w-screen-lg mx-auto p-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">
-        Multi-Model LLM Response Generator
+        LLM Evals
       </h1>
       <form
         onSubmit={handleSubmit}
@@ -178,7 +178,7 @@ export default function PromptForm() {
       </form>
 
       {/* LLMResponse Components */}
-      <div className="mt-4 flex flex-nowrap gap-4 overflow-x-auto">
+      <div className="flex gap-4 p-4 bg-gray-900 rounded-lg overflow-x-auto">
         <LLMResponse response={gemma2Response} model="gemma2-9b-it" />
         <LLMResponse response={mixtralResponse} model="mixtral-8x7b-32768" />
         <LLMResponse response={llamaResponse} model="llama-3.3-70b-versatile" />
