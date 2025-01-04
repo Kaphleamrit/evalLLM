@@ -1,13 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import LLMResponse from "../components/llmResponse";
+import Evals from "./evals";
 
 export default function PromptForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [gemma2Response, setGemma2Response] = useState(""); // Final response
-  const [mixtralResponse, setMixtralResponse] = useState(""); // Final response
-  const [llamaResponse, setLlamaResponse] = useState(""); // Final response
+  const [gemma2Response, setGemma2Response] = useState("");
+  const [mixtralResponse, setMixtralResponse] = useState("");
+  const [llamaResponse, setLlamaResponse] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,32 +43,41 @@ export default function PromptForm() {
   };
 
   return (
-    <div className="max-w-screen-lg mx-auto p-4">
-      <form onSubmit={handleSubmit} className="flex items-center space-x-2">
+    <div className="max-w-screen-lg mx-auto p-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">
+        Multi-Model LLM Response Generator
+      </h1>
+      <form onSubmit={handleSubmit} className="flex items-center space-x-4 mb-8">
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Enter your prompt"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Enter your prompt here..."
+          className="flex-grow bg-white border border-gray-300 text-gray-800 text-base rounded-lg shadow-md focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           required
-          disabled={isLoading} // Disable textarea while loading
+          disabled={isLoading}
         />
         <button
           type="submit"
-          className={`text-white ${
-            isLoading ? "bg-gray-500" : "bg-blue-700 hover:bg-blue-800"
-          } focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-          disabled={isLoading} // Disable button while loading
+          className={`text-white font-bold px-6 py-3 rounded-lg shadow-md transition ${
+            isLoading
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
+          }`}
+          disabled={isLoading}
         >
-          {isLoading ? "Submitting..." : "Submit"}
+          {isLoading ? "Loading..." : "Submit"}
         </button>
       </form>
 
       {/* LLMResponse Components */}
-      <div className="mt-4 flex justify-between gap-4">
+      <div className="mt-4 flex flex-nowrap gap-4 overflow-x-auto">
         <LLMResponse response={gemma2Response} model="gemma2-9b-it" />
         <LLMResponse response={mixtralResponse} model="mixtral-8x7b-32768" />
         <LLMResponse response={llamaResponse} model="llama-3.3-70b-versatile" />
+      </div>
+          <hr className="my-8" />
+      <div className="max-w-4xl mx-auto p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg">
+        <Evals />
       </div>
     </div>
   );
